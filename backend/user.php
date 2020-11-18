@@ -9,6 +9,26 @@
   $result = mysqli_query($conn, $sql);
   // $row = mysqli_fetch_assoc($result);
 
+  if( isset($_POST['editUser']) && !empty($_POST['id']) ){
+      $id = $_POST['id'];
+      $first_name = isset($_POST['first_name']) ? $_POST['first_name'] : '';
+      $name = isset($_POST['name']) ? $_POST['name'] : '';
+      $bio = isset($_POST['bio']) ? $_POST['bio'] : '';
+
+      $sql = "
+        UPDATE user
+        SET first_name = '$first_name', name = '$name', bio = '$bio'
+        WHERE id = $id;
+      ";
+      if(mysqli_query($conn, $sql)){
+        header("Refresh:0");
+        $su = 'Cập nhật dữ liệu thành công';
+        // header('Location:../signIn.php')
+      }else{
+        $er = "Cập nhật dữ liệu thất bại";
+      }
+  }
+
 
 ?>
 
@@ -76,6 +96,16 @@
                 </div>
               </div>
             </div>
+            <?php if (isset($su)) { ?>
+            <div class="alert alert-success" role="alert">
+              <?php echo $su; ?>
+            </div>
+            <?php  } ?>
+            <?php if (isset($er)) { ?>
+            <div class="alert alert-danger" role="alert">
+              <?php echo $er; ?>
+            </div>
+            <?php  } ?>
             <table class="table">
               <thead>
                 <tr>
@@ -111,7 +141,7 @@
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                          <h5 class="modal-title" id="exampleModalLabel">Form Edit</h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
@@ -121,26 +151,27 @@
                             <input type="hidden" name="id" value="<?php echo $row['id']?>">
                             <div class="form-group">
                               <label for="Firstname" class="col-form-label">First name</label>
-                              <input type="text" class="form-control" id="Firstname" value="<?php echo $row['first_name']?>">
+                              <input type="text" class="form-control" id="Firstname" value="<?php echo $row['first_name']?>" name="first_name">
                             </div>
                             <div class="form-group">
                               <label for="Name" class="col-form-label">Name</label>
                               <input type="text" name="name" class="form-control" id="Name" value="<?php echo $row['name']?>">
                             </div>
                             <div class="form-group">
-                              <label for="Password" class="col-form-label">Password</label>
-                              <input type="password" name="password" class="form-control" id="Password" value="<?php echo $row['password']?>">
+                              <label for="Email" class="col-form-label">Email</label>
+                              <input type="email" name="email" class="form-control" id="Email" value="<?php echo $row['email']?>" disabled>
                             </div>
                             <div class="form-group">
                               <label for="message-text" class="col-form-label">Bio:</label>
                               <textarea  name="bio" class="form-control" id="message-text" rows="5"><?php echo $row['bio']?></textarea>
                             </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary" name="editUser">Edit</button>
+                            </div>
                           </form>
                         </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary">Edit</button>
-                        </div>
+                        
                       </div>
                     </div>
                   </div>
