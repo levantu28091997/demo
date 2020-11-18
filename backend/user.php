@@ -51,7 +51,7 @@
       <header class="ad-header d-flex align-items-center px-5">
         <div class="search ">
           <form>
-            <input class="form-control" type="search" name="search" placeholder="Search user">
+            <input class="form-control" type="search" name="search" placeholder="Search user" onkeyup="getSearch(this.value)">
           </form>
         </div>
         <div class="setting-user ml-auto position-relative">
@@ -120,7 +120,7 @@
                   <th scope="col">Active</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody id="result">
                 <?php 
                   $stt = 0;
                   while ($row = mysqli_fetch_assoc($result)) {
@@ -186,11 +186,19 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
       CKEDITOR.replace( 'editor1' );
+    </script>
+    <script>
+      function getSearch(value){
+        $.post('search.php', {search:value}, function(data){
+          $("#result").html(data);
+        });
+      }
     </script>
     <script type="text/javascript" src="../assets/js/main.js"></script>
   </body>
